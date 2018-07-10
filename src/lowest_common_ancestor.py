@@ -15,8 +15,8 @@ class Node:
 
 
 class BinarySearchTree:
-    def __init__(self):
-        self.root = None
+    def __init__(self, root: Node = None):
+        self.root = root
 
     def create(self, val):
         if not self.root:
@@ -116,3 +116,51 @@ class BinarySearchTree:
         out = []
         
         return out
+
+def find_node_with_val_path(tree: BinarySearchTree, val: int)->Node:
+  path = []
+  if tree and tree.root:
+    stack = [tree.root]
+    while len(stack):
+      popped: Node = stack.pop()
+      path.append(popped)
+      if val == popped.info:
+        break
+      else:
+        if popped.left is not None:
+          stack.append(popped.left)
+        if popped.right is not None:
+          stack.append(popped.right)
+
+
+def lcm_with_array(tree: BinarySearchTree, lval: int, rval: int)->Node:
+  larr = find_node_with_val_path(tree, lval)
+  rarr = find_node_with_val_path(tree, rval)
+  print(larr)
+  print(rarr)
+  short_arr = rarr
+  long_arr = larr
+  if len(larr) <= len(rarr):
+    short_arr = larr
+    long_arr = rarr
+
+  ret_node: Node = None
+  for i in range(len(short_arr)):
+   if long_arr[i] == short_arr[i]:
+     ret_node = long_arr[i]
+     break
+
+  return ret_node
+
+def lca(root, v1, v2):
+  bst = BinarySearchTree(root=root)
+  lcm_with_array(bst, v1, v2)
+
+if __name__=='__main__':
+  arr = [4, 2, 3, 1, 7, 6]
+  tree = BinarySearchTree()
+  for i in arr:
+     tree.create(i)
+
+  node = lcm_with_array(tree=tree, lval=1, rval=7)
+  print(node)
